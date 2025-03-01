@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Checkbox from 'expo-checkbox';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -11,11 +12,14 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [dob, setDob] = useState(new Date());
-  const [gender, setGender] = useState('');
+
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(true); // Make DateTimePicker always visible
+
+  const [gender, setGender] = useState('');
+  const [isFemale, setFemale] = useState(false);
+  const [isMale, setMale] = useState(false);
+
   const router = useRouter();
 
   const onChange = (event, selectedDate) => {
@@ -38,6 +42,12 @@ export default function SignUp() {
     }
   };
 
+  const handleGenderChange = (gender) => {
+    setFemale(gender === 'female');
+    setMale(gender === 'male');
+    setGender(gender);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign Up</Text>
@@ -57,18 +67,35 @@ export default function SignUp() {
       />
 
       <View style={styles.datePickerContainer}>
-      
         <View style={styles.datePickerBox}>
-        <Text style={styles.dateLabel}>Date of Birth</Text>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              onChange={onChange}
-            />
-          )}
+          <Text style={styles.dateLabel}>Date of Birth</Text>
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            onChange={onChange}
+          />
+        </View>
+      </View>
+
+      <View style={styles.checkboxContainer}>
+        <View style={styles.checkboxRow}>
+          <Checkbox 
+            value={isFemale}
+            onValueChange={() => handleGenderChange('female')}
+            color={isFemale ? '#0060bf' : undefined}
+          />
+          <Text style={styles.checkboxText}>Female</Text>
+        </View>
+
+        <View style={styles.checkboxRow}>
+          <Checkbox 
+            value={isMale}
+            onValueChange={() => handleGenderChange('male')}
+            color={isMale ? '#0060bf' : undefined}
+          />
+          <Text style={styles.checkboxText}>Male</Text>
         </View>
       </View>
 
@@ -138,5 +165,18 @@ const styles = StyleSheet.create({
     color: 'blue',
     textAlign: 'center',
     marginTop: 20,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginRight: 20,
+  },
+  checkboxText: {
+    marginLeft: 10,
   },
 });
