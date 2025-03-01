@@ -4,6 +4,8 @@ import { useRouter } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import HealthNews from './news';
+import Add from './add';
+import Member from './member';
 
 export default function Home() {
   const router = useRouter();
@@ -23,6 +25,8 @@ export default function Home() {
       <Text style={styles.appName}>MediSense</Text>
       <Text style={styles.news}>Health News of the Day</Text>
       <HealthNews />
+      <Member/>
+      <Add/>
       {/* <Button title="Logout" onPress={handleLogout} /> */}
       </SafeAreaView>
   );
