@@ -1,10 +1,12 @@
-def individual_serial(todo) -> dict:
+def individual_serial(user) -> dict:
   return {
-    "id": str(todo["_id"]),
-    "name": todo["name"],
-    "description": todo["description"],
-    "complete": todo["complete"]
+    "id": str(user["_id"]),
+    "firstName": user["firstName"],
+    "lastName": user["lastName"],
+    "dateOfBirth": user["dateOfBirth"],
+    "gender": user["gender"],
+    "email": user["email"]
   }
 
-def list_serial(todos) -> list:
-  return[individual_serial(todo) for todo in todos]
+def list_serial(users) -> list:
+  return[individual_serial(user) for user in users]
