@@ -1,8 +1,9 @@
 // app/home.js
-import { View, Text, Button } from 'react-native';
+import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
+import HealthNews from './news';
 
 export default function Home() {
   const router = useRouter();
@@ -17,9 +18,31 @@ export default function Home() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Welcome to the Home Screen!</Text>
-      <Button title="Logout" onPress={handleLogout} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      {/* TODO: LOGO IMAGE */}
+      <Text style={styles.appName}>MediSense</Text>
+      <Text style={styles.news}>Health News of the Day</Text>
+      <HealthNews />
+      {/* <Button title="Logout" onPress={handleLogout} /> */}
+      </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start', 
+    alignItems: 'center',
+    backgroundColor: '#fff', 
+  },
+  appName: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    margin: 20,
+    marginBottom: 40
+  },
+  news: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  }
+});
