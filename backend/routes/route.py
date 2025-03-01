@@ -17,6 +17,12 @@ async def get_users():
 async def post_user(user: User):
   collection_name.insert_one(dict(user))
 
+  if not result.inserted_id:
+      raise HTTPException(status_code=500, detail="User could not be created")
+  
+  return {"message": "User created successfully", "id": str(result.inserted_id)}
+
+
 #PUT Request Method
 @router.put("/{id}")
 async def put_user(id: str, user: User):

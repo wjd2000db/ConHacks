@@ -35,7 +35,24 @@ export default function SignUp() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      Alert.alert('Success', 'Account created successfully!');
+
+      const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          dateOfBirth: date.toISOString().split("T")[0],
+          gender,
+          email,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      Alert.alert('Welcome to MediSense', 'Account created successfully!');
       router.replace('/home');
     } catch (error) {
       Alert.alert('Error', error.message);
