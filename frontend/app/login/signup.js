@@ -22,8 +22,8 @@ export default function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
+  const [date, setDate] = useState(new Date()); // 날짜 상태
+  const [showDatePicker, setShowDatePicker] = useState(false); // 달력 표시 여부
 
   const [gender, setGender] = useState("");
   const [isFemale, setFemale] = useState(false);
@@ -32,11 +32,14 @@ export default function SignUp() {
 
   const router = useRouter();
 
+  // 날짜 변경 핸들러
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+    setShowDatePicker(false); // 날짜 선택 후 달력 숨기기
   };
 
+  // 회원가입 핸들러
   const handleSignUp = async () => {
     if (!email || 
         !password || 
@@ -54,7 +57,7 @@ export default function SignUp() {
       await createUser({
         firstName,
         lastName,
-        dateOfBirth: date.toISOString().split("T")[0],
+        dateOfBirth: date.toISOString().split("T")[0], // YYYY-MM-DD 형식으로 변환
         gender,
         email,
       });
@@ -67,8 +70,8 @@ export default function SignUp() {
     }
   };
 
+  // 성별 변경 핸들러
   const handleGenderChange = (gender) => {
-
     setFemale(gender === "female");
     setMale(gender === "male");
     setOthers(gender === "Others");
@@ -80,6 +83,7 @@ export default function SignUp() {
     <View style={styles.container}>
       <Text style={styles.header}>Sign Up</Text>
 
+      {/* 이름 입력 */}
       <TextInput
         placeholder="First Name"
         placeholderTextColor="#888"
@@ -96,20 +100,28 @@ export default function SignUp() {
         style={styles.input}
       />
 
-      <View style={styles.datePickerContainer}>
-        <View style={styles.datePickerBox}>
-          <Text style={styles.dateLabel}>Date of Birth</Text>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            is24Hour={true}
-            onChange={onChange}
-            style={styles.dateTimePicker}
-          />
-        </View>
-      </View>
+      {/* 생년월일 선택 */}
+      <TouchableOpacity
+        style={styles.datePickerBox}
+        onPress={() => setShowDatePicker(true)} // 달력 표시
+      >
+        <Text style={styles.dateLabel}>
+          {date.toISOString().split("T")[0]} {/* 선택된 날짜 표시 */}
+        </Text>
+      </TouchableOpacity>
 
+      {/* 조건부로 달력 표시 */}
+      {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          is24Hour={true}
+          onChange={onChange}
+        />
+      )}
+
+      {/* 성별 선택 */}
       <View style={styles.checkboxContainer}>
         <Text style={styles.checkboxText}>Gender</Text>
 
@@ -143,6 +155,7 @@ export default function SignUp() {
         </View>
       </View>
 
+      {/* 이메일 및 비밀번호 입력 */}
       <TextInput
         placeholder="Email"
         placeholderTextColor="#888"
@@ -169,8 +182,10 @@ export default function SignUp() {
         style={styles.input}
       />
 
+      {/* 회원가입 버튼 */}
       <Button title="Sign Up" onPress={handleSignUp} />
 
+      {/* 로그인 링크 */}
       <TouchableOpacity onPress={() => router.push("/login")}>
         <Text style={styles.loginText}>Already have an account? Sign In</Text>
       </TouchableOpacity>
@@ -194,12 +209,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 13,
   },
-  datePickerContainer: {
-    marginBottom: 20,
-  },
-  dateLabel: {
-    fontSize: 16,
-  },
   datePickerBox: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -208,9 +217,10 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 13,
     width: "100%",
+    marginBottom: 20,
   },
-  dateTimePicker: {
-    width: 150,
+  dateLabel: {
+    fontSize: 16,
   },
   loginText: {
     color: "blue",
