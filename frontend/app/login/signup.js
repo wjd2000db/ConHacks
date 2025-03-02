@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
-    borderRadius: 13,
+    borderRadius: 5,
   },
   datePickerContainer: {
     marginBottom: 20,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     padding: 8,
-    borderRadius: 13,
+    borderRadius: 5,
     width: "100%",
   },
   dateTimePicker: {

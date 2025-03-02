@@ -1,14 +1,20 @@
-import React,{ useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons'; 
-import useUserStore from '../useUserStore'; 
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Button,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import useUserStore from "../useUserStore";
 
 export default function Member({ user }) {
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modalPosition, setModalPosition] = React.useState({ top: 0, left: 0 });
-
 
   const handleIconPress = (event) => {
     const { pageY, pageX } = event.nativeEvent;
@@ -28,7 +34,7 @@ export default function Member({ user }) {
   };
 
   const handleMedication = () => {
-    router.push(`/home/detail/${user.id}`); 
+    router.push(`/home/detail/${user.id}`);
   };
 
   return (

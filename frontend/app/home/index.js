@@ -4,6 +4,7 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
+  Image,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { signOut } from "firebase/auth";
@@ -17,7 +18,7 @@ import useUserStore from "../useUserStore";
 export default function Home() {
   const router = useRouter();
   const [members, setMembers] = useState([]);
-  const { user, setUser,setMember} = useUserStore(); 
+  const { user, setUser, setMember } = useUserStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,8 +51,12 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
       {/* TODO: LOGO IMAGE */}
-
-      <Text style={styles.appName}>MediSense</Text>
+      <Image
+        source={require("../../assets/logo.png")}
+        style={styles.image}
+        resizeMode="contain"
+      />
+      {/* <Text style={styles.appName}>MediSense</Text> */}
       <Text style={styles.news}>Health News of the Day</Text>
       <HealthNews />
       {loading ? (
@@ -71,6 +76,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#fff",
+  },
+  image: {
+    width: 80,
+    height: 80,
   },
   appName: {
     fontSize: 30,
