@@ -65,9 +65,7 @@ export default function Login() {
         placeholderTextColor="gray"
       />
       <Button title="Login" onPress={handleLogin} />
-      <TouchableOpacity onPress={() => router.push("/login/signup")}>
-      />
-      <Button title="Login" onPress={handleLogin} />
+
       <TouchableOpacity onPress={() => router.push('/login/signup')}>
         <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
