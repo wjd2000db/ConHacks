@@ -102,31 +102,33 @@ export default function SignUp() {
       <View style={styles.checkboxContainer}>
         <Text style={styles.checkboxText}>Gender</Text>
 
-        <View style={styles.checkboxRow}>
-          <Checkbox
-            value={isFemale}
-            onValueChange={() => handleGenderChange("female")}
-            color={isFemale ? "#0060bf" : undefined}
-          />
-          <Text style={styles.checkboxText}>Female</Text>
-        </View>
+        <View style={styles.checkboxGroup}>
+          <View style={styles.checkboxRow}>
+            <Checkbox
+              value={isFemale}
+              onValueChange={() => handleGenderChange("female")}
+              color={isFemale ? "#0060bf" : undefined}
+            />
+            <Text style={styles.checkboxText}>Female</Text>
+          </View>
 
-        <View style={styles.checkboxRow}>
-          <Checkbox
-            value={isMale}
-            onValueChange={() => handleGenderChange("male")}
-            color={isMale ? "#0060bf" : undefined}
-          />
-          <Text style={styles.checkboxText}>Male</Text>
-        </View>
+          <View style={styles.checkboxRow}>
+            <Checkbox
+              value={isMale}
+              onValueChange={() => handleGenderChange("male")}
+              color={isMale ? "#0060bf" : undefined}
+            />
+            <Text style={styles.checkboxText}>Male</Text>
+          </View>
 
-        <View style={styles.checkboxRow}>
-          <Checkbox
-            value={isOthers}
-            onValueChange={() => handleGenderChange("Others")}
-            color={isOthers ? "#0060bf" : undefined}
-          />
-          <Text style={styles.checkboxText}>Others</Text>
+          <View style={styles.checkboxRow}>
+            <Checkbox
+              value={isOthers}
+              onValueChange={() => handleGenderChange("Others")}
+              color={isOthers ? "#0060bf" : undefined}
+            />
+            <Text style={styles.checkboxText}>Others</Text>
+          </View>
         </View>
       </View>
 
@@ -206,17 +208,20 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 20,
+  },
+  checkboxGroup: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   checkboxRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 1,
-    marginRight: 5,
+    marginRight: 10,
   },
   checkboxText: {
     marginLeft: 5,
-    flex: 1,
   },
 });
