@@ -44,9 +44,9 @@ export default function SignUp() {
         gender,
         email,
       });
-      
+
       Alert.alert('Welcome to MediSense', 'Account created successfully!');
-      router.replace('/home');
+      router.replace('/');
     } catch (error) {
       Alert.alert('Error', error.message);
     }
