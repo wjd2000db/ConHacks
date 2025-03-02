@@ -11,6 +11,9 @@ const useUserStore = create((set) => ({
 
   medication: null,
   setMedication: (med) => set({ medication: med }),
+
+  new: null,
+  setNew: (member) => set({ member }),
 }));
 
 export default useUserStore;

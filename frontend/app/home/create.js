@@ -22,8 +22,7 @@ export default function CreateMember() {
   const [showDatePicker, setShowDatePicker] = useState(false); 
   const router = useRouter();
 
-  // 저장 버튼 클릭 시
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert('Error', 'Please enter a name.');
       return;
@@ -37,18 +36,26 @@ export default function CreateMember() {
       return;
     }
 
-    // 모든 정보를 다음 페이지로 전달
-    console.log({
+
+    const memberData = {
       name,
       gender: selectedGender,
       medications: [] 
-    });
-    
-    Alert.alert('Success', 'Member added successfully!', [
-      { text: 'OK', onPress: () => router.push('/home') },
-    ]);
-  };
+    };
 
+    try {
+      const newMember = await createMember(memberData);
+      console.log('New member created:', newMember);
+      
+      Alert.alert('Success', 'Member added successfully!', [
+        { text: 'OK', onPress: () => router.push('/home') },
+      ]);
+    } catch (error) {
+ 
+      console.error('Error creating member:', error);
+      Alert.alert('Error', 'Failed to add member. Please try again.');
+    }
+  };
 
   const handleCancel = () => {
     Alert.alert('Confirm', 'Are you sure you want to cancel?', [
@@ -66,9 +73,7 @@ export default function CreateMember() {
 
         <View style={styles.topSpacer} />
 
- 
         <Text style={styles.title}>Add New Member</Text>
-
 
         <View style={styles.genderContainer}>
           <Text style={styles.label}>Gender:</Text>
@@ -94,7 +99,6 @@ export default function CreateMember() {
           </View>
         </View>
 
-        {/* 이름 입력 필드 */}
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Name:</Text>
           <TextInput
@@ -109,7 +113,7 @@ export default function CreateMember() {
           />
         </View>
 
-        {/* 생년월일 선택 */}
+ 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Birthday:</Text>
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>
