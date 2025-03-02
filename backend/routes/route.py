@@ -14,7 +14,7 @@ import json
 import os
 # import openai
 import time
-from openai import RateLimitError, APIError
+# from openai import RateLimitError, APIError
 
 import google.generativeai as genai
 from google.api_core.exceptions import GoogleAPIError
