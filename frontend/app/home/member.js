@@ -29,15 +29,20 @@ const calculateAge = (dateOfBirth) => {
 const getEmojiByGenderAndAge = (gender, dateOfBirth) => {
   const age = calculateAge(dateOfBirth);
 
+  // gender 값이 "male" 또는 "female"이 아닐 경우 "🌈" 반환
+  if (gender !== "male" && gender !== "female") {
+    return "🌈";
+  }
+
   if (age < 6) {
     // 6세 이전
-    return gender === "male" ? "👶♂️" : gender === "female" ? "👶♀️" : "🌈";
+    return gender === "male" ? "👶♂️" : "👶♀️";
   } else if (age >= 6 && age <= 18) {
     // 6세 ~ 18세
-    return gender === "male" ? "👦" : gender === "female" ? "👧" : "🌈";
+    return gender === "male" ? "👦" : "👧";
   } else {
     // 18세 이상
-    return gender === "male" ? "👨" : gender === "female" ? "👩" : "🌈";
+    return gender === "male" ? "👨" : "👩";
   }
 };
 
@@ -135,8 +140,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1, // 나머지 공간을 차지하게 함
-    flexDirection: "column", // 이름과 생년월일을 세로로 배치
-    justifyContent: "center", // 텍스트를 세로로 가운데 정렬
+    flexDirection: "row", // 이름과 생년월일을 세로로 배치
+    justifyContent: "space-between", // 텍스트를 세로로 가운데 정렬
   },
   name: {
     fontSize: 22,
