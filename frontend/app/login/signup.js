@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Checkbox from 'expo-checkbox';
+import { createUser } from '../utils/route';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -36,22 +37,14 @@ export default function SignUp() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
 
-      const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          dateOfBirth: date.toISOString().split("T")[0],
-          gender,
-          email,
-        }),
+      await createUser({
+        firstName,
+        lastName,
+        dateOfBirth: date.toISOString().split("T")[0],
+        gender,
+        email,
       });
-  
-      const data = await response.json();
-  
+      
       Alert.alert('Welcome to MediSense', 'Account created successfully!');
       router.replace('/home');
     } catch (error) {
