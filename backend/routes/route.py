@@ -12,7 +12,7 @@ from dataclasses import dataclass, asdict
 import requests
 import json
 import os
-import openai
+# import openai
 import time
 from openai import RateLimitError, APIError
 
