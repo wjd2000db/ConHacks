@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { signOut } from 'firebase/auth';
-import { auth } from '../../firebaseConfig';
-import HealthNews from './news';
-import Add from './add';
-import Member from './member';
+import {
+  SafeAreaView,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
+import HealthNews from "./news";
+import Add from "./add";
+import Member from "./member";
 import { fetchMembers } from "../utils/route";
 import useUserStore from "../useUserStore";
 
@@ -19,7 +24,7 @@ export default function Home() {
     if (user) {
       loadMembers(user.id);
     } else {
-      router.replace('/login');
+      router.replace("/login");
     }
   }, [user]);
 
@@ -36,16 +41,16 @@ export default function Home() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      router.replace('/login'); 
+      router.replace("/login");
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error("Error logging out:", error);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* TODO: LOGO IMAGE */}
-   
+
       <Text style={styles.appName}>MediSense</Text>
       <Text style={styles.news}>Health News of the Day</Text>
       <HealthNews />
@@ -54,27 +59,27 @@ export default function Home() {
       ) : (
         members.map((member) => <Member key={member.id} user={member} />)
       )}
-      <Add/>
+      <Add />
       {/* <Button title="Logout" onPress={handleLogout} /> */}
-      </SafeAreaView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start', 
-    alignItems: 'center',
-    backgroundColor: '#fff', 
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   appName: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     margin: 20,
-    marginBottom: 40
+    marginBottom: 40,
   },
   news: {
     fontSize: 24,
-    fontWeight: 'bold',
-  }
+    fontWeight: "bold",
+  },
 });
