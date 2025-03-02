@@ -24,8 +24,15 @@ export default function Member({user}) {
     });
   };
 
+  const handleMedication = () => {
+    router.push({
+      pathname: '/home/medication',
+      params: { name: user.name },
+    });
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleMedication}>
       <View style={styles.userInfoContainer}>
         <Text style={styles.name}>{user.name}</Text> 
         <Text style={styles.dob}>{user.dateOfBirth}</Text>
@@ -48,7 +55,7 @@ export default function Member({user}) {
           </View>
         </View>
       </Modal>
-    </View>
+    </TouchableOpacity>
   );
 }
 
