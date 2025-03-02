@@ -29,7 +29,7 @@ export default function RootLayout() {
       <Stack.Screen name="/home/create" options={{ headerShown: false }}/>
       <Stack.Screen name="/home/edit" options={{title: 'Edit User'}}/>
       <Stack.Screen name="/home/detail/[id]" options={{ headerShown: false }}/>
-
+      <Stack.Screen name="/home/detail/medication" options={{ headerShown: false }}/>
       <Stack.Screen name="/login/index" options={{ headerShown: false }} />
       <Stack.Screen name="/login/signup" options={{ headerShown: false }} />
 

@@ -32,7 +32,7 @@ router = APIRouter()
 # client = openai.OpenAI(api_key=key)
 
 # Gemini
-gemkey=os.getenv("GEM_KEY")
+gemkey="AIzaSyDcIJQXjdMxaZk4jyDNlE_s1jmKxu0DZ5g"
 genai.configure(api_key=gemkey)
 model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
 
@@ -183,7 +183,7 @@ async def post_medication(medi_name: str):
   # print(serious_se)
   # print(relevant_int)
 
-  med = Medication(drug_name=name, purpose=pps, common_sideeffects=common_se,serious_sideeffects=serious_se, interaction_warnings=relevant_int)
+  med = Medication(medication=medi_name,drug_name=name, purpose=pps, common_sideeffects=common_se,serious_sideeffects=serious_se, interaction_warnings=relevant_int)
   med_dict = med.dict()
 
   result = collection_name.insert_one(med_dict)
@@ -193,3 +193,17 @@ async def post_medication(medi_name: str):
   else:
       print("Failed to insert medication.")
 
+
+@router.get("/medication/{medi_name}")
+async def get_medication_by_name(medi_name: str):
+    # Query the database for the medication with the specified name
+    medication = collection_name.find_one({"medication": medi_name})
+
+    # If medication not found, raise an HTTPException
+    if not medication:
+        raise HTTPException(status_code=404, detail="Medication not found")
+    
+    # Convert ObjectId fields to string before returning the response
+    medication["_id"] = str(medication["_id"])  # Convert ObjectId to string
+
+    return medication
