@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "semibold",
     color: "#333",
+    flex: 1,
   },
   dob: {
     fontSize: 16,
