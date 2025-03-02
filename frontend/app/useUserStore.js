@@ -8,6 +8,9 @@ const useUserStore = create((set) => ({
   member: [], 
   setMember: (members) => set({ member: members }), 
   clearMember: () => set({ member: [] }),
+
+  medication: null,
+  setMedication: (med) => set({ medication: med }),
 }));
 
 export default useUserStore;

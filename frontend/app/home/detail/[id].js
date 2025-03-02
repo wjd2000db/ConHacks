@@ -1,12 +1,18 @@
+import { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import useUserStore from "../../useUserStore";
+import { addMedicationToMember, createMedication } from "../../utils/route";
+import { useRouter } from "expo-router";
 
 export default function Detail() {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { member } = useUserStore();
+  const { member,setMedication } = useUserStore();
 
-  // ID에 해당하는 멤버 찾기
+  const [newMedication, setNewMedication] = useState(""); // 새 약물 이름을 입력할 상태
+  const [isAdding, setIsAdding] = useState(false); // 약물 추가 중 상태
+
   const user = member?.find((m) => m.id === id);
 
   if (!user) {
@@ -18,15 +24,43 @@ export default function Detail() {
     );
   }
 
-  // 알약 버튼 클릭 핸들러
   const handleMedicationPress = (medication) => {
-    alert(`You clicked on the medication: ${medication}`);
+    setMedication(medication); 
+    router.push("/home/detail/medication"); 
+  };
+
+  const handleAddMedication = async () => {
+    if (!newMedication) {
+      Alert.alert("Medication name is required.");
+      return;
+    }
+
+    try {
+      setIsAdding(true); 
+
+      const createResponse = await createMedication(newMedication); 
+      if (!createResponse) {
+        throw new Error("Failed to create medication");
+      }
+
+      const addResponse = await addMedicationToMember(id, newMedication);
+      if (addResponse) {
+        Alert.alert("Medication added successfully!");
+        setNewMedication(""); 
+      }
+
+    } catch (error) {
+      console.error("Error adding medication:", error);
+      Alert.alert("Failed to add medication.");
+    } finally {
+      setIsAdding(false); 
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{user.name}'s 💊</Text>
-      {/* 사용자에게 알약이 있는지 확인하고, 있을 경우 버튼을 렌더링 */}
+
       {user.medications && user.medications.length > 0 ? (
         user.medications.map((med, index) => (
           <TouchableOpacity
@@ -40,6 +74,22 @@ export default function Detail() {
       ) : (
         <Text style={styles.text}>No medications</Text>
       )}
+
+      <TextInput
+        style={styles.input}
+        placeholder="Enter medication name"
+        value={newMedication}
+        onChangeText={setNewMedication}
+      />
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={handleAddMedication}
+        disabled={isAdding}
+      >
+        <Text style={styles.addButtonText}>
+          {isAdding ? "Adding..." : "Add Medication"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -54,16 +104,37 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   medicationButton: {
-    backgroundColor: "#4CAF50", // 버튼 배경 색상
+    backgroundColor:"#fff",
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    borderWidth: 1, 
+    borderColor: "#2196F3", 
   },
   medicationText: {
     fontSize: 16,
-    color: "#fff", // 텍스트 색상
+    color: "#000",
+  },
+  input: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginTop: 500,
+    paddingHorizontal: 10,
+  },
+  addButton: {
+    backgroundColor: "#2196F3", 
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  addButtonText: {
+    fontSize: 16,
+    color: "#fff",
   },
 });

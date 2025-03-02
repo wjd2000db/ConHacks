@@ -13,7 +13,6 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 
-// 성별 버튼 스타일 함수
 const genderButtonStyle = (selectedGender, gender) => ({
   paddingVertical: 10,
   paddingHorizontal: 20,
@@ -140,7 +139,6 @@ export default function CreateMember() {
           )}
         </View>
 
-        {/* 취소 및 저장 버튼 */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.cancelButton]}
@@ -170,7 +168,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   topSpacer: {
-    height: 40, // 상단 여백 추가
+    height: 40, 
   },
   title: {
     fontSize: 24,
@@ -229,10 +227,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   cancelButton: {
-    backgroundColor: "#ccc", // 회색 배경
+    backgroundColor: "#ccc", 
   },
   saveButton: {
-    backgroundColor: "#28a745", // 초록색 배경
+    backgroundColor: "#28a745",
   },
   buttonText: {
     color: "#fff",
