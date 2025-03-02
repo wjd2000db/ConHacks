@@ -17,6 +17,8 @@ def individual_serial_member(member) -> dict:
     "userId": member["userId"],
     "name": member["name"],
     "dateOfBirth": member["dateOfBirth"],
+    "gender": member.get("gender"),  
+    "medications": member.get("medications", None)
   }
 
 def list_serial_member(members) -> list:
