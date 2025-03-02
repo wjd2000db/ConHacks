@@ -1,4 +1,4 @@
-def individual_serial(user) -> dict:
+def individual_serial_user(user) -> dict:
   return {
     "id": str(user["_id"]),
     "firstName": user["firstName"],
@@ -8,5 +8,16 @@ def individual_serial(user) -> dict:
     "email": user["email"]
   }
 
-def list_serial(users) -> list:
-  return[individual_serial(user) for user in users]
+def list_serial_user(users) -> list:
+  return[individual_serial_user(user) for user in users]
+
+def individual_serial_member(member) -> dict:
+  return {
+    "id": str(member["_id"]),
+    "userId": member["userId"],
+    "name": member["name"],
+    "dateOfBirth": member["dateOfBirth"],
+  }
+
+def list_serial_member(members) -> list:
+  return[individual_serial_member(member) for member in members]

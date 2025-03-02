@@ -19,7 +19,7 @@ export default function Member({user}) {
   const handleEdit = () => {
     setModalVisible(false);
     router.push({
-      pathname: '/home/edit',
+      pathname: 'home/edit',
       params: { name: user.name, dob: user.dob },
     });
   };

@@ -34,7 +34,7 @@ export default function Login() {
       const userData = await fetchUserData(email);
       setUser(userData);
 
-      router.push({pathname: '/home/index'});
+      router.push({pathname: '/home'});
     
     } catch (error) {
       Alert.alert("Error", error.message);
