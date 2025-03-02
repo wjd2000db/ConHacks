@@ -1,17 +1,24 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query
 from models.users import User
 from models.members import Member
 from config.database import collection_name
-from schema.schemas import list_serial
+from schema.schemas import list_serial_user
+from schema.schemas import list_serial_member
+from schema.schemas import individual_serial_user
 from bson import ObjectId
 
 router = APIRouter()
 
 #GET Request Method
-@router.get("/")
-async def get_users():
-  users = list_serial(collection_name.find())
-  return users
+@router.get("/")  
+async def get_user_by_email(email: str = Query(..., description="User email")):
+    user = collection_name.find_one({"email": email})
+    
+    if user:
+        return individual_serial_user(user)
+    
+    raise HTTPException(status_code=404, detail="User not found")
+
 
 #POST Request Method
 @router.post("/")
@@ -39,13 +46,13 @@ async def delete_user(id:str):
 
 @router.get("/members")
 async def get_members():
-    members = list_serial(collection_name.find())
+    members = list_serial_member(collection_name.find())
     return members
 
 # GET
 @router.get("/members/{user_id}")
 async def get_member_by_user(user_id: str):
-    members = list_serial(collection_name.find({"userId": user_id}))
+    members = list_serial_member(collection_name.find({"userId": user_id}))
     if not members:
         raise HTTPException(status_code=404, detail="No members found for this user")
     return members

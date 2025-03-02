@@ -24,8 +24,7 @@ export default function Login() {
       const userData = await fetchUserData(email);
       setUser(userData);
 
-      Alert.alert('Success', userData.id);
-      router.push({pathname: '/home/index'});
+      router.push({pathname: '/home'});
     
       router.setParams({user:userData});
     } catch (error) {
