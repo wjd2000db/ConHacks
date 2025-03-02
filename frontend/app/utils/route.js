@@ -70,3 +70,23 @@ export const createMember = async (memberData) => {
   }
 };
 
+export const createMedication = async (mediName) => {
+  try {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/medication/${mediName}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create medication");
+    }
+
+    return await response.json(); 
+  } catch (error) {
+    console.error("Error creating medication:", error);
+    throw error;
+  }
+};
+
