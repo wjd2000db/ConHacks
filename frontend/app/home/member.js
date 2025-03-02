@@ -3,6 +3,37 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-n
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';  
 
+// 나이 계산 함수
+const calculateAge = (dateOfBirth) => {
+  const today = new Date();
+  const birthDate = new Date(dateOfBirth);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+};
+
+// 이모티콘 선택 함수
+const getEmojiByGenderAndAge = (gender, dateOfBirth) => {
+  const age = calculateAge(dateOfBirth);
+
+  if (age < 6) {
+    // 6세 이전
+    return gender === "male" ? "👶♂️" : gender === "female" ? "👶♀️" : "🌈";
+  } else if (age >= 6 && age <= 18) {
+    // 5세 ~ 18세
+    return gender === "male" ? "👦" : gender === "female" ? "👧" : "🌈";
+  } else {
+    // 18세 이상
+    return gender === "male" ? "👨" : gender === "female" ? "👩" : "🌈";
+  }
+};
+
 export default function Member({user}) {
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false); 
@@ -19,12 +50,8 @@ export default function Member({user}) {
   const handleEdit = () => {
     setModalVisible(false);
     router.push({
-      pathname: '/home/edit', // 절대 경로 사용
-      params: {
-        name: user?.name || 'Unknown',
-        dob: user?.dob || new Date().toISOString().split('T')[0], // 기본값으로 오늘 날짜 사용
-        gender: user?.gender || 'other', // 기본값으로 'other' 사용
-      },
+      pathname: 'home/edit',
+      params: { name: user.name, dob: user.dob },
     });
   };
 
@@ -34,6 +61,9 @@ export default function Member({user}) {
       params: { name: user.name },
     });
   };
+
+  // 이모티콘 가져오기
+  const emoji = getEmojiByGenderAndAge(user.gender, user.dateOfBirth);
 
   return (
     <TouchableOpacity style={styles.container} onPress={handleMedication}>
