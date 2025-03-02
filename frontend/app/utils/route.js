@@ -48,3 +48,25 @@ export const fetchUserData = async (email) => {
     throw new Error('Failed to fetch user data');
   }
 };
+
+export const createMember = async (memberData) => {
+  try {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/members`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(memberData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create member");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating member:", error);
+    throw error;
+  }
+};
+

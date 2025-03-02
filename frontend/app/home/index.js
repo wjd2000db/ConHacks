@@ -12,7 +12,7 @@ import useUserStore from "../useUserStore";
 export default function Home() {
   const router = useRouter();
   const [members, setMembers] = useState([]);
-  const { user, setUser } = useUserStore(); 
+  const { user, setUser,setMember} = useUserStore(); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +28,7 @@ export default function Home() {
     const membersData = await fetchMembers(userId);
     if (membersData) {
       setMembers(membersData);
+      setMember(membersData);
     }
     setLoading(false);
   };
