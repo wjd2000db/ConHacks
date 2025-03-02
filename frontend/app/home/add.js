@@ -4,7 +4,6 @@ import { useRouter } from 'expo-router';
 export default function Add() {
   const router = useRouter();
 
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => router.push('/home/create')} style={styles.button}>
