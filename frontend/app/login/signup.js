@@ -1,25 +1,34 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebaseConfig';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import Checkbox from 'expo-checkbox';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Checkbox from "expo-checkbox";
 import { createUser } from '../utils/route';
 
 export default function SignUp() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
+  const [mode, setMode] = useState("date");
 
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState("");
   const [isFemale, setFemale] = useState(false);
   const [isMale, setMale] = useState(false);
+  const [isOthers, setOthers] = useState(false);
 
   const router = useRouter();
 
@@ -29,7 +38,12 @@ export default function SignUp() {
   };
 
   const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword || !firstName || !lastName || !gender) {
+    if (!email || 
+        !password || 
+        !confirmPassword || 
+        !firstName || 
+        !lastName || 
+        !gender) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
@@ -47,14 +61,18 @@ export default function SignUp() {
 
       Alert.alert('Welcome to MediSense', 'Account created successfully!');
       router.replace('/');
+      
     } catch (error) {
-      Alert.alert('Error', error.message);
+      Alert.alert("Error", error.message);
     }
   };
 
   const handleGenderChange = (gender) => {
-    setFemale(gender === 'female');
-    setMale(gender === 'male');
+
+    setFemale(gender === "female");
+    setMale(gender === "male");
+    setOthers(gender === "Others");
+
     setGender(gender);
   };
 
@@ -64,13 +82,15 @@ export default function SignUp() {
 
       <TextInput
         placeholder="First Name"
+        placeholderTextColor="#888"
         value={firstName}
         onChangeText={setFirstName}
         style={styles.input}
       />
-      
+
       <TextInput
         placeholder="Last Name"
+        placeholderTextColor="#888"
         value={lastName}
         onChangeText={setLastName}
         style={styles.input}
@@ -85,56 +105,73 @@ export default function SignUp() {
             mode={mode}
             is24Hour={true}
             onChange={onChange}
+            style={styles.dateTimePicker}
           />
         </View>
       </View>
 
       <View style={styles.checkboxContainer}>
-        <View style={styles.checkboxRow}>
-          <Checkbox 
-            value={isFemale}
-            onValueChange={() => handleGenderChange('female')}
-            color={isFemale ? '#0060bf' : undefined}
-          />
-          <Text style={styles.checkboxText}>Female</Text>
-        </View>
+        <Text style={styles.checkboxText}>Gender</Text>
 
-        <View style={styles.checkboxRow}>
-          <Checkbox 
-            value={isMale}
-            onValueChange={() => handleGenderChange('male')}
-            color={isMale ? '#0060bf' : undefined}
-          />
-          <Text style={styles.checkboxText}>Male</Text>
+        <View style={styles.checkboxGroup}>
+          <View style={styles.checkboxRow}>
+            <Checkbox
+              value={isFemale}
+              onValueChange={() => handleGenderChange("female")}
+              color={isFemale ? "#0060bf" : undefined}
+            />
+            <Text style={styles.checkboxText}>Female</Text>
+          </View>
+
+          <View style={styles.checkboxRow}>
+            <Checkbox
+              value={isMale}
+              onValueChange={() => handleGenderChange("male")}
+              color={isMale ? "#0060bf" : undefined}
+            />
+            <Text style={styles.checkboxText}>Male</Text>
+          </View>
+
+          <View style={styles.checkboxRow}>
+            <Checkbox
+              value={isOthers}
+              onValueChange={() => handleGenderChange("Others")}
+              color={isOthers ? "#0060bf" : undefined}
+            />
+            <Text style={styles.checkboxText}>Others</Text>
+          </View>
         </View>
       </View>
 
       <TextInput
         placeholder="Email"
+        placeholderTextColor="#888"
         value={email}
         onChangeText={setEmail}
         style={styles.input}
       />
-      
+
       <TextInput
         placeholder="Password"
+        placeholderTextColor="#888"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
         style={styles.input}
       />
-      
+
       <TextInput
         placeholder="Confirm Password"
+        placeholderTextColor="#888"
         secureTextEntry
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         style={styles.input}
       />
-      
+
       <Button title="Sign Up" onPress={handleSignUp} />
 
-      <TouchableOpacity onPress={() => router.push('/login')}>
+      <TouchableOpacity onPress={() => router.push("/login")}>
         <Text style={styles.loginText}>Already have an account? Sign In</Text>
       </TouchableOpacity>
     </View>
@@ -155,38 +192,47 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+    borderRadius: 13,
   },
   datePickerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 20,
   },
   dateLabel: {
-    marginRight: 10,
+    fontSize: 16,
   },
   datePickerBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderWidth: 1,
-    padding: 10,
-    flex: 1,
+    padding: 8,
+    borderRadius: 13,
+    width: "100%",
+  },
+  dateTimePicker: {
+    width: 150,
   },
   loginText: {
-    color: 'blue',
-    textAlign: 'center',
+    color: "blue",
+    textAlign: "center",
     marginTop: 20,
   },
   checkboxContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
+  checkboxGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   checkboxRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginRight: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 10,
   },
   checkboxText: {
-    marginLeft: 10,
+    marginLeft: 5,
   },
 });
