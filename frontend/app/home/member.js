@@ -3,16 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-n
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';  
 
-export default function Member() {
+export default function Member({user}) {
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false); 
   const [modalPosition, setModalPosition] = React.useState({ top: 0, left: 0 }); 
-
-
-  const user = {
-    name: '👩‍ Emma',
-    dob: '1998.02.02',
-  };
 
   const handleIconPress = (event) => {
     const { pageY, pageX } = event.nativeEvent;
@@ -34,7 +28,7 @@ export default function Member() {
     <View style={styles.container}>
       <View style={styles.userInfoContainer}>
         <Text style={styles.name}>{user.name}</Text> 
-        <Text style={styles.dob}>{user.dob}</Text>
+        <Text style={styles.dob}>{user.dateOfBirth}</Text>
 
         <TouchableOpacity onPress={handleIconPress}>
           <Ionicons name="ellipsis-vertical" size={20} color="gray" />

@@ -1,14 +1,36 @@
-// app/home.js
-import { SafeAreaView, Text, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import HealthNews from './news';
 import Add from './add';
 import Member from './member';
+import { fetchMembers } from "../utils/route";
+import useUserStore from "../useUserStore";
 
 export default function Home() {
   const router = useRouter();
+  const [members, setMembers] = useState([]);
+  const { user, setUser } = useUserStore(); 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      loadMembers(user.id);
+    } else {
+      router.replace('/login');
+    }
+  }, [user]);
+
+  const loadMembers = async (userId) => {
+    setLoading(true);
+    const membersData = await fetchMembers(userId);
+    if (membersData) {
+      setMembers(membersData);
+    }
+    setLoading(false);
+  };
 
   const handleLogout = async () => {
     try {
@@ -22,10 +44,15 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
       {/* TODO: LOGO IMAGE */}
+   
       <Text style={styles.appName}>MediSense</Text>
       <Text style={styles.news}>Health News of the Day</Text>
       <HealthNews />
-      <Member/>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        members.map((member) => <Member key={member.id} user={member} />)
+      )}
       <Add/>
       {/* <Button title="Logout" onPress={handleLogout} /> */}
       </SafeAreaView>
