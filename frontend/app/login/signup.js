@@ -15,6 +15,37 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Checkbox from "expo-checkbox";
 import { createUser } from '../utils/route';
 
+// 나이 계산 함수
+const calculateAge = (dateOfBirth) => {
+  const today = new Date();
+  const birthDate = new Date(dateOfBirth);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+};
+
+// 이모티콘 선택 함수
+const getEmojiByGenderAndAge = (gender, dateOfBirth) => {
+  const age = calculateAge(dateOfBirth);
+
+  if (age < 6) {
+    // 6세 이전
+    return gender === "male" ? "👶♂️" : gender === "female" ? "👶♀️" : "🌈";
+  } else if (age >= 6 && age <= 18) {
+    // 5세 ~ 18세
+    return gender === "male" ? "👦" : gender === "female" ? "👧" : "🌈";
+  } else {
+    // 18세 이상
+    return gender === "male" ? "👨" : gender === "female" ? "👩" : "🌈";
+  }
+};
+
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,6 +110,9 @@ export default function SignUp() {
     setGender(gender);
   };
 
+  // 이모티콘 가져오기
+  const emoji = getEmojiByGenderAndAge(gender, date);
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign Up</Text>
@@ -106,7 +140,7 @@ export default function SignUp() {
         onPress={() => setShowDatePicker(true)} // 달력 표시
       >
         <Text style={styles.dateLabel}>
-          {date.toISOString().split("T")[0]} {/* 선택된 날짜 표시 */}
+          {emoji} {date.toISOString().split("T")[0]} {/* 이모티콘 + 선택된 날짜 표시 */}
         </Text>
       </TouchableOpacity>
 

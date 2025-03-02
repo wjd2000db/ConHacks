@@ -19,8 +19,12 @@ export default function Member({user}) {
   const handleEdit = () => {
     setModalVisible(false);
     router.push({
-      pathname: 'home/edit',
-      params: { name: user.name, dob: user.dob },
+      pathname: '/home/edit', // 절대 경로 사용
+      params: {
+        name: user?.name || 'Unknown',
+        dob: user?.dob || new Date().toISOString().split('T')[0], // 기본값으로 오늘 날짜 사용
+        gender: user?.gender || 'other', // 기본값으로 'other' 사용
+      },
     });
   };
 
