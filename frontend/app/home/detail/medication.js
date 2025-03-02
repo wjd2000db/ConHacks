@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { getMedication } from "../../utils/route";
 import useUserStore from "../../useUserStore";
 
@@ -33,7 +33,7 @@ const MedicationScreen = () => {
   }, [medication]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>💊 {medication} 💊</Text>
 
       <View style={styles.infoBox}>
@@ -55,14 +55,14 @@ const MedicationScreen = () => {
         <Text style={styles.label}>⚡ Interaction Warnings:</Text>
         <Text style={[styles.value, styles.caution]}>{interactionWarnings}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
+    flexGrow: 1, // Ensures scrollview content takes the full height of the screen
+    justifyContent: "flex-start",
     padding: 20,
     backgroundColor: "#f8f9fa",
   },
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#007bff", // Blue for section titles
+    color: "#007bff", 
   },
   value: {
     fontSize: 16,
@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   warning: {
-    color: "#dc3545", // Red for serious side effects
+    color: "#dc3545", 
   },
   caution: {
-    color: "#fd7e14", // Orange for interaction warnings
+    color: "#fd7e14", 
   },
 });
 

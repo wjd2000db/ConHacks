@@ -142,7 +142,7 @@ async def add_medication_to_member(id: str, medi_name: str):
 @router.post("/medication/{medi_name}")
 async def post_medication(medi_name: str):
   # print(medi_name)
-  response = requests.get(fda_url)
+  response = requests.get(f'https://api.fda.gov/drug/label.json?search=openfda.brand_name:{medi_name}&limit=1')
   response_obj = response.json()
   drug_info = response_obj.get("results")
 
