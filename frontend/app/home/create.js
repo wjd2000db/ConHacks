@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Alert, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,12 +10,15 @@ const genderButtonStyle = (selectedGender, gender) => ({
   paddingHorizontal: 20,
   borderRadius: 5,
   borderWidth: 1,
+
   backgroundColor: selectedGender === gender ? '#28a745' : '#f0f0f0', // 선택된 경우 초록색 배경
   borderColor: selectedGender === gender ? '#28a745' : '#ccc', // 선택된 경우 초록색 테두리
+
 });
 
 export default function CreateMember() {
   const [selectedGender, setSelectedGender] = useState(null); // 선택된 성별
+
   const [name, setName] = useState(''); // 이름 입력값
   const [birthday, setBirthday] = useState(new Date()); // 선택된 생년월일
   const [showDatePicker, setShowDatePicker] = useState(false); // 날짜 선택기 표시 여부
@@ -53,11 +57,13 @@ export default function CreateMember() {
       { text: 'No', style: 'cancel' }, // 취소 선택 시 아무 작업도 하지 않음
       { text: 'Yes', onPress: () => router.push('/home') }, // 확인 시 홈 화면으로 이동
     ]);
+
   };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
+
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // iOS에서 키보드 피하기
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -140,6 +146,7 @@ export default function CreateMember() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
     </KeyboardAvoidingView>
   );
 }
@@ -147,6 +154,7 @@ export default function CreateMember() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     backgroundColor: '#fff',
   },
   scrollContainer: {
@@ -173,10 +181,12 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     borderColor: '#ccc',
+
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     fontSize: 16,
+
   },
   genderContainer: {
     marginBottom: 30,
@@ -198,6 +208,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     textAlign: 'center',
+
   },
   buttonContainer: {
     flexDirection: 'row',
