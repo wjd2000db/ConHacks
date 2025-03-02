@@ -1,4 +1,5 @@
-import sys
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 from fastapi import FastAPI
 from routes.route import router
 

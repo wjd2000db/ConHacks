@@ -8,15 +8,19 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { useState } from "react";
-import { useRouter } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
+import { fetchUserData } from '../utils/route';
+import useUserStore from '../useUserStore';
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { setUser } = useUserStore(); 
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -26,8 +30,12 @@ export default function Login() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Success", "Logged in successfully!");
-      router.replace("/home");
+
+      const userData = await fetchUserData(email);
+      setUser(userData);
+
+      router.push({pathname: '/home/index'});
+    
     } catch (error) {
       Alert.alert("Error", error.message);
     }
@@ -58,6 +66,9 @@ export default function Login() {
       />
       <Button title="Login" onPress={handleLogin} />
       <TouchableOpacity onPress={() => router.push("/login/signup")}>
+      />
+      <Button title="Login" onPress={handleLogin} />
+      <TouchableOpacity onPress={() => router.push('/login/signup')}>
         <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
@@ -89,8 +100,8 @@ const styles = StyleSheet.create({
     color: "black",
   },
   signupText: {
-    color: "blue",
-    textAlign: "center",
+    color: 'blue',
+    textAlign: 'center',
     marginTop: 20,
   },
 });

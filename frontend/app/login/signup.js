@@ -13,6 +13,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Checkbox from "expo-checkbox";
+import { createUser } from '../utils/route';
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -37,31 +38,41 @@ export default function SignUp() {
   };
 
   const handleSignUp = async () => {
-    if (
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !firstName ||
-      !lastName ||
-      !gender
-    ) {
-      Alert.alert("Error", "Please fill in all fields");
+    if (!email || 
+        !password || 
+        !confirmPassword || 
+        !firstName || 
+        !lastName || 
+        !gender) {
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      Alert.alert("Success", "Account created successfully!");
-      router.replace("/home");
+
+      await createUser({
+        firstName,
+        lastName,
+        dateOfBirth: date.toISOString().split("T")[0],
+        gender,
+        email,
+      });
+
+      Alert.alert('Welcome to MediSense', 'Account created successfully!');
+      router.replace('/');
+      
     } catch (error) {
       Alert.alert("Error", error.message);
     }
   };
 
   const handleGenderChange = (gender) => {
+
     setFemale(gender === "female");
     setMale(gender === "male");
     setOthers(gender === "Others");
+
     setGender(gender);
   };
 
@@ -170,7 +181,7 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 20,
   },
   header: {
