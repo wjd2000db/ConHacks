@@ -5,8 +5,10 @@ import {
   ActivityIndicator,
   StyleSheet,
   Image,
+  ScrollView,
+  View, // Added View wrapper for members to handle styling
 } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import HealthNews from "./news";
@@ -50,22 +52,28 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* TODO: LOGO IMAGE */}
       <Image
         source={require("../../assets/logo.png")}
         style={styles.image}
         resizeMode="contain"
       />
-      {/* <Text style={styles.appName}>MediSense</Text> */}
       <Text style={styles.news}>Health News of the Day</Text>
       <HealthNews />
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        members.map((member) => <Member key={member.id} user={member} />)
-      )}
+
+      {/* Wrap members list with ScrollView */}
+      <ScrollView style={styles.membersList}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          members.map((member) => (
+            <View key={member.id} style={styles.memberWrapper}>
+              <Member user={member} style={styles.member} />
+            </View>
+          ))
+        )}
+      </ScrollView>
+
       <Add />
-      {/* <Button title="Logout" onPress={handleLogout} /> */}
     </SafeAreaView>
   );
 }
@@ -76,19 +84,28 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#fff",
+    padding: 10,
   },
   image: {
     width: 80,
     height: 80,
   },
-  appName: {
-    fontSize: 30,
-    fontWeight: "bold",
-    margin: 20,
-    marginBottom: 40,
-  },
   news: {
     fontSize: 24,
     fontWeight: "bold",
+    marginVertical: 20,
+  },
+  membersList: {
+    flex: 1,
+    width: "100%",
+    paddingHorizontal: 10, // Add padding to ensure no content is cut off
+  },
+  memberWrapper: {
+    width: "100%", // Ensure member takes up the full width
+    paddingVertical: 5, // Add vertical spacing between members
+  },
+  member: {
+    width: "100%", // Ensure member takes up full available width
+    marginBottom: 10, 
   },
 });

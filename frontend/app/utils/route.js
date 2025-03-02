@@ -79,6 +79,26 @@ export const createMember = async (memberData) => {
 export const createMedication = async (mediName) => {
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/medication/${mediName}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create medication");
+    }
+
+    return await response.json(); 
+  } catch (error) {
+    console.error("Error creating medication:", error);
+    throw error;
+  }
+};
+
+export const getMedication = async (mediName) => {
+  try {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_URL}/medication/${mediName}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -96,3 +116,25 @@ export const createMedication = async (mediName) => {
   }
 };
 
+export const addMedicationToMember = async (id, mediName) => {
+  try {
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_SERVER_URL}/members/${id}/${mediName}`,
+      {
+        method: "PUT", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to add medication");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding medication to member:", error);
+    throw error;
+  }
+};

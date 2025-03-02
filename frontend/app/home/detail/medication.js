@@ -1,51 +1,60 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { createMedication } from "../../utils/route";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { getMedication } from "../../utils/route";
+import useUserStore from "../../useUserStore";
 
 const MedicationScreen = () => {
-  const [mediName, setMediName] = useState(""); 
-  const [purpose, setPurpose] = useState(""); 
-  const [commonSideEffects, setCommonSideEffects] = useState(""); 
-  const [seriousSideEffects, setSeriousSideEffects] = useState(""); 
-  const [interactionWarnings, setInteractionWarnings] = useState(""); 
-  const [respon, setRespon] = useState(""); 
+  const medication = useUserStore((state) => state.medication);
 
-  const handleSubmit = async () => {
-    try {
-      const response = await createMedication(mediName); // 약 이름만 보내기
-      setRespon(response);
-      if (response) {
-        // 응답에서 각 데이터를 추출하여 상태로 설정
-        setPurpose(response.purpose || "");
-        setCommonSideEffects(response.common_sideeffects || "");
-        setSeriousSideEffects(response.serious_sideeffects || "");
-        setInteractionWarnings(response.interaction_warnings || "");
+  const [purpose, setPurpose] = useState("");
+  const [commonSideEffects, setCommonSideEffects] = useState("");
+  const [seriousSideEffects, setSeriousSideEffects] = useState("");
+  const [interactionWarnings, setInteractionWarnings] = useState("");
+
+  useEffect(() => {
+    const fetchMedicationData = async () => {
+      if (!medication) return;
+
+      try {
+        const response = await getMedication(medication);
+        if (response) {
+          setPurpose(response.purpose || "No information available");
+          setCommonSideEffects(response.common_sideeffects || "No information available");
+          setSeriousSideEffects(response.serious_sideeffects || "No information available");
+          setInteractionWarnings(response.interaction_warnings || "No information available");
+        }
+      } catch (error) {
+        console.error("Error fetching medication:", error);
+        setPurpose("Error fetching medication data");
       }
-    } catch (error) {
-      console.error("Error submitting medication:", error);
-      setPurpose("Error creating medication");
-    }
-  };
+    };
+
+    fetchMedicationData();
+  }, [medication]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Medication</Text>
-      {/* Ensure the response is a string or extract string data from the object */}
-      <Text>{JSON.stringify(respon)}</Text>  {/* You can stringify the whole response object to check it */}
-      <TextInput
-        style={styles.input}
-        placeholder="Medication Name"
-        value={mediName}
-        onChangeText={setMediName}
-      />
+      <Text style={styles.title}>💊 {medication} 💊</Text>
 
-      <Button title="Submit" onPress={handleSubmit} />
+      <View style={styles.infoBox}>
+        <Text style={styles.label}>📌 Purpose:</Text>
+        <Text style={styles.value}>{purpose}</Text>
+      </View>
 
-      {/* 응답 메시지들 각각 출력, ensure these are strings */}
-      <Text style={styles.responseMessage}>{String(purpose)}</Text>
-      <Text style={styles.responseMessage}>{String(commonSideEffects)}</Text>
-      <Text style={styles.responseMessage}>{String(seriousSideEffects)}</Text>
-      <Text style={styles.responseMessage}>{String(interactionWarnings)}</Text>
+      <View style={styles.infoBox}>
+        <Text style={styles.label}>⚠️ Common Side Effects:</Text>
+        <Text style={styles.value}>{commonSideEffects}</Text>
+      </View>
+
+      <View style={styles.infoBox}>
+        <Text style={styles.label}>🚨 Serious Side Effects:</Text>
+        <Text style={[styles.value, styles.warning]}>{seriousSideEffects}</Text>
+      </View>
+
+      <View style={styles.infoBox}>
+        <Text style={styles.label}>⚡ Interaction Warnings:</Text>
+        <Text style={[styles.value, styles.caution]}>{interactionWarnings}</Text>
+      </View>
     </View>
   );
 };
@@ -55,25 +64,41 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
+    backgroundColor: "#f8f9fa",
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
     marginBottom: 20,
-    textAlign: "center",
   },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
+  infoBox: {
+    backgroundColor: "white",
+    padding: 15,
+    borderRadius: 10,
     marginBottom: 10,
-    paddingHorizontal: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
-  responseMessage: {
-    marginTop: 10,
+  label: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#007bff", // Blue for section titles
+  },
+  value: {
     fontSize: 16,
-    color: "green",
-    textAlign: "center",
+    color: "#333",
+    marginTop: 5,
+  },
+  warning: {
+    color: "#dc3545", // Red for serious side effects
+  },
+  caution: {
+    color: "#fd7e14", // Orange for interaction warnings
   },
 });
 

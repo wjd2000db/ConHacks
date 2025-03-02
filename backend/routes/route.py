@@ -118,6 +118,26 @@ async def delete_member(id: str):
     return {"message": "Member deleted successfully"}
 
 
+@router.put("/members/{id}/{medi_name}")
+async def add_medication_to_member(id: str, medi_name: str):
+
+    member = collection_name.find_one({"_id": ObjectId(id)})
+    
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+    
+    update_result = collection_name.update_one(
+        {"_id": ObjectId(id)},
+        {"$push": {"medications": medi_name}}
+    )
+    
+    if update_result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to add medication to member")
+    
+    return {"message": "Medication added successfully", "memberId": id, "medication": medi_name}
+
+
+
 # add request for new medication item
 @router.post("/medication/{medi_name}")
 async def post_medication(medi_name: str):
